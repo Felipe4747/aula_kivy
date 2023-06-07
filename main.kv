@@ -1,0 +1,99 @@
+#:import utils kivy.utils
+#:include cadastro.kv
+#:include pesquisa.kv
+
+<Tela_Cadastro@MDScreen>
+    name: 'tela_cadastro'
+    MDIconButton:
+        icon: 'close-octagon'
+        pos_hint: {'center': (.9,.95)}
+        on_release: app.stop()
+    MDIconButton:
+        icon: 'skip-backward'
+        pos_hint: {'center': (.1,.05)}
+        on_release: root.manager.current = 'tela_inicial'
+    MDFloatLayout:
+        pos_hint: {'center': (.5,.5)}
+        radius: [10]
+        size_hint: .6,.5
+        orientation: 'vertical'
+        canvas:
+            Color:
+                rgb: utils.get_color_from_hex('#000072')
+            RoundedRectangle:
+                size: self.size
+                pos: self.pos
+                radius: 50,50,50,50
+
+        MDLabel:
+            text: 'Tela de cadastro'
+            pos_hint: {'center_y': .8, 'center_x': .5}
+            halign: 'center'
+
+        MDTextField:
+            pos_hint: {'center_x': .5, 'center_y': .6}
+            size_hint_x: .8
+            #icon_left: 'account'
+            hint_text: 'Nome'
+
+        MDTextField:
+            pos_hint: {'center_x': .5, 'center_y': .4}
+            size_hint_x: .8
+            #icon_left: 'key-variant'
+            hint_text: 'Nascimento'
+
+        MDTextField:
+            pos_hint: {'center_x': .5, 'center_y': .4}
+            size_hint_x: .8
+            #icon_left: 'key-variant'
+            hint_text: 'Cidade'
+
+        MDFillRoundFlatButton:
+            pos_hint: {'center_x': .5, 'center_y': .2}
+            text: 'Salvar'
+
+
+MDNavigationLayout:
+    MDTopAppBar:
+        id: toolbar
+        title: 'Gerenciador de Dados'
+        left_action_items: [['menu', lambda x: nav_drawer.set_state('open')]]
+        pos_hint: {'top':1}
+    MDScreenManager:
+        id: screen_manager
+        MDScreen:
+            name: 'homepage'
+            MDIconButton:
+                icon: 'firebase'
+                icon_size: dp(100)
+                pos_hint: {'center_x': .5, 'center_y': .5}
+        Cadastros:
+            name: 'cadastros'
+        Pesquisa:
+            name: 'pesquisa'
+    MDNavigationDrawer:
+        id: nav_drawer
+        MDNavigationDrawerMenu:
+            MDNavigationDrawerHeader:
+                title: 'Gerenciador'
+                spacing: '4dp'
+                padding: '12dp',0,0,'36dp'
+            MDNavigationDrawerItem:
+                icon: 'account-multiple-plus'
+                text_color: '#cccccc'
+                text_color_focus: '#aaaaaa'
+                selected_color: '#ffffff'
+                text: 'Cadastramento'
+                on_release:
+                    nav_drawer.set_state('close')
+                    app.root.ids.screen_manager.current = 'cadastros'
+            MDNavigationDrawerItem:
+                icon: 'database-search'
+                text_color: '#cccccc'
+                text_color_focus: '#aaaaaa'
+                selected_color: '#ffffff'
+                text: 'Pesquisa'
+                on_release:
+                    nav_drawer.set_state('close')
+                    app.limpar_pesquisa()
+                    app.root.ids.screen_manager.current = 'pesquisa'
