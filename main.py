@@ -38,7 +38,6 @@ class MainApp(MDApp):
     dado = requests.get(url + '.json')
     dict_dados = dado.json()
 
-    requests.delete(url + '/RA/aebf/.json')
 
     # requests.patch(url, data=json.dumps(dict_dados))
 
@@ -95,6 +94,7 @@ class MainApp(MDApp):
             tela_pesquisa.ids.inp_cpf.disabled = True
             tela_pesquisa.ids.btn_pesquisar.pos_hint = {'x': 2, 'y': 2}
             tela_pesquisa.ids.btn_alterar.pos_hint = {}
+            tela_pesquisa.ids.btn_remover.pos_hint = {}
             tela_pesquisa.ids.inp_nome.text = self.dict_dados[cpf]['nome']
             tela_pesquisa.ids.inp_nome.pos_hint = {}
             tela_pesquisa.ids.inp_nascimento.text = self.dict_dados[cpf]['nascimento']
@@ -117,6 +117,7 @@ class MainApp(MDApp):
         tela_pesquisa.ids.inp_cpf.disabled = False
         tela_pesquisa.ids.btn_pesquisar.pos_hint = {}
         tela_pesquisa.ids.btn_alterar.pos_hint = {'x': 2, 'y': 2}
+        tela_pesquisa.ids.btn_remover.pos_hint = {'x': 2, 'y': 2}
         tela_pesquisa.ids.inp_cpf.text = ''
         tela_pesquisa.ids.inp_nome.text = ''
         tela_pesquisa.ids.inp_nome.pos_hint = {'x': 2, 'y': 2}
@@ -130,5 +131,10 @@ class MainApp(MDApp):
     def alterar(self, nome, nascimento, cidade, cpf, salario):
         self.cadastrar(nome, nascimento, cidade, cpf, salario, alterar=True)
 
+    def remover(self, cpf):
+        requests.delete(self.url + '/'+cpf+'/.json')
+        if self.existe_cpf(cpf):
+            show_message('Dados deletados com sucesso!').open()
+        self.limpar_pesquisa()
 
 MainApp().run()

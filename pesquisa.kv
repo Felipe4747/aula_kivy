@@ -2,8 +2,8 @@
     MDBoxLayout:
         size_hint_x: .8
         adaptive_height: True
-        spacing: dp(10)
-        pos_hint: {'center_x': .5, 'center_y': .5}
+        spacing: dp(5)
+        pos_hint: {'center_x': .5, 'center_y': .45}
         orientation: 'vertical'
         MDLabel:
             text: 'Digite um CPF:'
@@ -47,3 +47,9 @@
             pos_hint: {'x': 2, 'y': 2}
             on_release:
                 app.alterar(inp_nome.text, inp_nascimento.text, inp_cidade.text, inp_cpf.text, inp_salario.text)
+        MDRectangleFlatButton:
+            text: 'Remover'
+            id: btn_remover
+            pos_hint: {'x': 2, 'y': 2}
+            on_release:
+                app.remover(inp_cpf.text)
