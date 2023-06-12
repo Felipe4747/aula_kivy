@@ -1,6 +1,7 @@
 #:import utils kivy.utils
 #:include cadastro.kv
 #:include pesquisa.kv
+#:include grafico.kv
 
 <Tela_Cadastro@MDScreen>
     name: 'tela_cadastro'
@@ -71,6 +72,8 @@ MDNavigationLayout:
             name: 'cadastros'
         Pesquisa:
             name: 'pesquisa'
+        Grafico:
+            name: 'grafico'
     MDNavigationDrawer:
         id: nav_drawer
         MDNavigationDrawerMenu:
@@ -97,3 +100,13 @@ MDNavigationLayout:
                     nav_drawer.set_state('close')
                     app.limpar_pesquisa()
                     app.root.ids.screen_manager.current = 'pesquisa'
+            MDNavigationDrawerItem:
+                icon: 'database-search'
+                text_color: '#cccccc'
+                text_color_focus: '#aaaaaa'
+                selected_color: '#ffffff'
+                text: 'Grafico'
+                on_release:
+                    nav_drawer.set_state('close')
+                    app.limpar_pesquisa()
+                    app.root.ids.screen_manager.current = 'grafico'

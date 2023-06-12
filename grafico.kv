@@ -1,0 +1,46 @@
+<Grafico>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        spacing: dp(10)
+        MDScrollView:
+            id: scrollview
+            MDGridLayout:
+                padding: dp(10)
+                spacing: dp(10)
+                cols: 1
+                adaptive_height: True
+                Widget:
+                    size_hint_y: None
+                    height: dp(70)
+                MDLabel:
+                    text: 'Gráfico de distribuição de salário'
+                MDSeparator:
+                MDStackLayout:
+                    spacing: dp(10)
+                    MDChip:
+                        text: 'Barras'
+                        line_color: app.theme_cls.disabled_hint_text_color
+                        md_bg_color: '#'+app.theme_cls.colors['Blue']['700']
+                        text_color: app.theme_cls.text_color
+                        elevation: 2
+                        on_active: if self.active: app.remove_marks_all_chips(self)
+                    MDChip:
+                        text: 'Retas'
+                        line_color: app.theme_cls.disabled_hint_text_color
+                        md_bg_color: '#'+app.theme_cls.colors['Purple']['700']
+                        text_color: app.theme_cls.text_color
+                        elevation: 2
+                        on_active: if self.active: app.remove_marks_all_chips(self)
+                    MDChip:
+                        text: 'Pizza'
+                        line_color: app.theme_cls.disabled_hint_text_color
+                        md_bg_color: '#'+app.theme_cls.colors['Red']['700']
+                        text_color: app.theme_cls.text_color
+                        elevation: 2
+                        on_active: if self.active: app.remove_marks_all_chips(self)
+                Widget:
+                    size_hint_y: None
+                    height: dp(40)
+                MDRaisedButton:
+                    text: 'Gerar gráfico'
+                    pos_hint: {'y'}

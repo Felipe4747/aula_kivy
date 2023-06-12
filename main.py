@@ -3,7 +3,7 @@ from kivymd.app import MDApp
 from kivy.core.window import Window
 from kivy.lang.builder import Builder
 from kivy.uix.screenmanager import Screen
-
+from kivy_garden.graph import Graph
 import requests
 import json
 
@@ -15,6 +15,9 @@ class Cadastros(Screen):
 
 
 class Pesquisa(Screen):
+    pass
+
+class Grafico(Screen):
     pass
 
 
@@ -136,5 +139,12 @@ class MainApp(MDApp):
         if self.existe_cpf(cpf):
             show_message('Dados deletados com sucesso!').open()
         self.limpar_pesquisa()
+
+    def remove_marks_all_chips(self, selected_chip):
+        tela_grafico = self.root.ids.screen_manager.get_screen('grafico')
+        g = tela_grafico.ids.scrollview.children
+        for instance_chip in g[0].children:
+            if instance_chip != {} and instance_chip != selected_chip:
+                instance_chip.active = False
 
 MainApp().run()
