@@ -232,11 +232,27 @@ class MainApp(MDApp):
         return linechart
 
     def monta_grafico_pizza(self, x, hist):
+        gerenciador = self.root.ids.screen_manager
         total = sum(hist)
         porc_hist = []
         for item in hist:
             porc_hist.append((item/total)*100)
+        chaves = []
+        for v in x:
+            chaves.append('R$ '+str(v))
+        item = {}
+        for i in range(len(porc_hist)):
+            item[chaves[i]] = porc_hist[i]
+        items = [item]
 
-
+        piechart = AKPieChart(
+            items=items,
+            size_hint=[None, None],
+            size=(dp(300),dp(300)),
+            pos_hint={'center_x': None, 'center_y': None},
+            pos=(dp(50), dp(50))
+        )
+        gerenciador.get_screen('grafico').ids.graph.add_widget(piechart)
+        return piechart
 
 MainApp().run()
