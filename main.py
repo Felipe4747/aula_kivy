@@ -6,6 +6,9 @@ from kivy.uix.screenmanager import Screen
 from kivy_garden.graph import Graph
 import requests
 import json
+from kivymd_extensions.akivymd.uix.charts import AKBarChart, AKPieChart, AKLineChart
+from kivy.metrics import dp
+
 
 Window.size = (1280 / 3.5, 2220 / 3.5)
 
@@ -41,7 +44,7 @@ class MainApp(MDApp):
     dado = requests.get(url + '.json')
     dict_dados = dado.json()
 
-
+    grafico = 0
     # requests.patch(url, data=json.dumps(dict_dados))
 
     def build(self):
@@ -142,9 +145,98 @@ class MainApp(MDApp):
 
     def remove_marks_all_chips(self, selected_chip):
         tela_grafico = self.root.ids.screen_manager.get_screen('grafico')
-        g = tela_grafico.ids.scrollview.children
-        for instance_chip in g[0].children:
+        g = tela_grafico.ids.scrollview.children[0].children
+        for instance_chip in g[2].children:
             if instance_chip != {} and instance_chip != selected_chip:
                 instance_chip.active = False
+
+    def draw_graphic(self):
+        gerenciador = self.root.ids.screen_manager
+        self.dados = requests.get(self.url + '.json')
+        self.dados = self.dados.json()
+        salarios = []
+        for chave in self.dados.keys():
+            salarios.append(self.dados[chave]['salario'])
+        salarios.sort()
+        print('salarios', salarios)
+        n = 5
+        min_value = float(salarios[0])
+        max_value = float(salarios[-1])
+        passo = (max_value-min_value)/n
+
+        x = []
+        aux = min_value + passo
+        for i in range(n):
+            x.append(round(aux, 2))
+            aux = aux+passo
+        print('x', x)
+
+        hist = [0]*n
+        for value in salarios:
+            j = int((float(value)-min_value)/passo)
+            if j >= n:
+                j = n-1
+            hist[j] += 1
+        print('hist', hist)
+
+        if self.grafico != 0:
+            gerenciador.get_screen('grafico').ids.graph.remove_widget(self.grafico)
+
+        for instance_chip in gerenciador.get_screen('grafico').ids.chips_grafico.children:
+            if instance_chip.active:
+                if instance_chip.text == 'Barras':
+                    self.grafico = self.monta_grafico_barras(x, hist)
+                    break
+                if instance_chip.text == 'Retas':
+                    self.grafico = self.monta_grafico_linha(x, hist)
+                    break
+                if instance_chip.text == 'Pizza':
+                    self.grafico = self.monta_grafico_pizza(x, hist)
+                    break
+
+    def monta_grafico_barras(self, x, hist):
+        gerenciador = self.root.ids.screen_manager
+        barchart = AKBarChart(
+            x_values=x,
+            y_values=hist,
+            bars_color='#AE4646',
+            lines_color='#000000',
+            bg_color='#FFFFFF',
+            size_hint_y=None,
+            height=dp(280),
+            label_size=dp(12),
+            size=(dp(100), dp(300)),
+            labels=True,
+            bars_radius=0,
+            labels_color='#000000',
+
+        )
+        gerenciador.get_screen('grafico').ids.graph.add_widget(barchart)
+        return barchart
+
+    def monta_grafico_linha(self, x, hist):
+        gerenciador = self.root.ids.screen_manager
+        linechart = AKLineChart(
+            x_values=x,
+            y_values=hist,
+            bg_color='#ffffff',
+            size_hint_y=None,
+            height=dp(20),
+            label_size=dp(12),
+            size=(dp(100), dp(300)),
+            circles_color='#4646FF',
+            lines_color='#000000',
+            labels_color='#000000',
+        )
+        gerenciador.get_screen('grafico').ids.graph.add_widget(linechart)
+        return linechart
+
+    def monta_grafico_pizza(self, x, hist):
+        total = sum(hist)
+        porc_hist = []
+        for item in hist:
+            porc_hist.append((item/total)*100)
+
+
 
 MainApp().run()

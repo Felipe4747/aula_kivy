@@ -5,6 +5,7 @@
         MDScrollView:
             id: scrollview
             MDGridLayout:
+                id: graph
                 padding: dp(10)
                 spacing: dp(10)
                 cols: 1
@@ -16,6 +17,7 @@
                     text: 'Gráfico de distribuição de salário'
                 MDSeparator:
                 MDStackLayout:
+                    id: chips_grafico
                     spacing: dp(10)
                     MDChip:
                         text: 'Barras'
@@ -44,3 +46,4 @@
                 MDRaisedButton:
                     text: 'Gerar gráfico'
                     pos_hint: {'y'}
+                    on_release: app.draw_graphic()
